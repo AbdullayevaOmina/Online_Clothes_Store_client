@@ -1,14 +1,13 @@
-import { Navbar } from "flowbite-react";
+import { DarkThemeToggle, Navbar } from "flowbite-react";
 import Search from "../ui/search";
 import SignInModal from "../modals/signin";
-import LikesProduct from "../modals/likes/LikesProduct";
-import { cartIcon } from "@icons";
+import { cartIcon, likeIcon } from "@icons";
 import { Tooltip } from "flowbite-react";
 
 function Component() {
   return (
     <Navbar rounded className="">
-      <Navbar.Brand href="https://flowbite-react.com">
+      <Navbar.Brand href="/">
         <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white ">
           Online Kiyim Do'koni
         </span>
@@ -16,9 +15,16 @@ function Component() {
       <Navbar.Toggle />
       <Search />
       <Navbar.Collapse>
-        <div className="flex gap-6 ">
+        <div className="flex gap-6 items-center">
+          <DarkThemeToggle />
           <SignInModal />
-          <LikesProduct />
+          <Tooltip
+            className="bg-gray-500 text-white dark:bg-gray-700"
+            content="Yoqtirilganlar"
+            placement="bottom"
+          >
+            <a href="/likes">{likeIcon}</a>
+          </Tooltip>
           <Tooltip
             className="bg-gray-500 text-white dark:bg-gray-700"
             content="Savat"

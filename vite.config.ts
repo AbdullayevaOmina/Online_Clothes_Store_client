@@ -13,10 +13,16 @@ export default defineConfig({
       { find: "@pages", replacement: "/src/pages" },
       { find: "@layout", replacement: "/src/layout" },
       { find: "@service", replacement: "/src/service" },
+      { find: "@store", replacement: "/src/store/index" },
       { find: "@interfaces", replacement: "/src/interfaces" },
+      {
+        find: "@products-interface",
+        replacement: "/src/interfaces/products.ts",
+      },
       { find: "@router", replacement: "/src/router" },
       { find: "@routes", replacement: "/src/router/routes.tsx" },
       { find: "@token-service", replacement: "/src/utils/token-service.ts" },
+      { find: "@service", replacement: "/src/service" },
     ],
   },
 });
