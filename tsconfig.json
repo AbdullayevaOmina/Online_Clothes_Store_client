@@ -10,6 +10,7 @@
       "@interfaces": ["./src/interfaces"],
       "@components": ["./src/components"],
       "@ui": ["./src/components/ui"],
+      "@icons": ["./src/assets/icons.tsx"],
       "@layout": ["./src/layout"],
       "@pages": ["./src/pages"],
       "@router": ["./src/router"],

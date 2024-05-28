@@ -2,14 +2,14 @@ import { Products, Posts } from "@pages";
 
 const router = [
   {
-    path: "/main/products",
+    path: "/products",
     element: <Products />,
-    content:"Products",
+    content: "Products",
   },
   {
-    path: "/main/posts",
+    path: "/posts",
     element: <Posts />,
-    content:"Posts",
+    content: "Posts",
   },
 ];
 
