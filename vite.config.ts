@@ -14,7 +14,7 @@ export default defineConfig({
       { find: "@layout", replacement: "/src/layout" },
       { find: "@service", replacement: "/src/service" },
       { find: "@store", replacement: "/src/store/index" },
-      { find: "@interfaces", replacement: "/src/interfaces" },
+      { find: "@register-interfaces", replacement: "/src/interfaces/register.ts" },
       {
         find: "@products-interface",
         replacement: "/src/interfaces/products.ts",

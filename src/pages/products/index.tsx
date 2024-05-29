@@ -13,7 +13,6 @@ const Index: React.FC = () => {
     getAll(params);
   }, [params]);
 
-
   return (
     <div>
       {isLoading ? (

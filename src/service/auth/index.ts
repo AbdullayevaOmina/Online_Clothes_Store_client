@@ -1,8 +1,8 @@
 import { request } from "../config";
-import { Request } from "@interfaces";
-export const auth:Request={
-    signin: (data)=> request.post("/login",data),
-    signup: (data)=> request.post("/signup",data),
-    signout: ()=> request.post("/signout"),
-    reset: (data)=> request.post("/reset", data),
-}
+import { Request } from "@register-interfaces";
+const register: Request = {
+  signin: (data) => request.post("v1/login", data),
+  signup: (data) => request.post("/v1/user", data),
+};
+
+export default register;

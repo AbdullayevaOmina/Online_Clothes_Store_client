@@ -1,2 +1,4 @@
 import useProductStore from "./product";
-export { useProductStore };
+import useRegisterStore from "./register";
+import useCartStore from "./cart";
+export { useProductStore, useRegisterStore, useCartStore };

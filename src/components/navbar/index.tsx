@@ -36,8 +36,7 @@ const MyNavbar: React.FC = () => {
       <Navbar className="fixed top-0 left-0 right-0 z-50">
         <Navbar.Brand href="/">
           <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-            {/* Online Kiyim Do'koni */}
-            <img className="w-44" src={logo} alt="" />
+            <img className="w-44" src={logo} alt="Online Kiyim Do'koni" />
           </span>
         </Navbar.Brand>
         <Navbar.Toggle />

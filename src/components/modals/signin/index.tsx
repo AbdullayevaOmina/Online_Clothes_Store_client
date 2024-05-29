@@ -10,15 +10,14 @@ import {
   TextInput,
   Tooltip,
 } from "flowbite-react";
+import { useRegisterStore } from "@store";
+import { toast } from "react-toastify";
 
-export default function SignInModal() {
-  const [openModalIn, setOpenModalIn] = useState(false);
-  const [openModalUp, setOpenModalUp] = useState(false);
-  const [loginData, setLoginData] = useState({
-    email: "",
-    password: "",
-  });
-
+const SignInModal = () => {
+  const { signin, signup, isLoading } = useRegisterStore();
+  const [openModal, setOpenModal] = useState<"in" | "up" | "">("");
+  const [status, setStatus] = useState<number | undefined | null>();
+  const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [signupData, setSignupData] = useState({
     email: "",
     password: "",
@@ -27,9 +26,8 @@ export default function SignInModal() {
     gender: "",
   });
 
-  const toggleModal = (type: string) => {
-    setOpenModalIn(type === "in");
-    setOpenModalUp(type === "up");
+  const toggleModal = (type: "in" | "up" | "") => {
+    setOpenModal(type);
     setLoginData({ email: "", password: "" });
     setSignupData({
       email: "",
@@ -40,18 +38,31 @@ export default function SignInModal() {
     });
   };
 
-  const handleInputChange = (e: any, setData: any) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setData: React.Dispatch<React.SetStateAction<any>>
+  ) => {
     const { id, value } = e.target;
     setData((prev: any) => ({ ...prev, [id]: value }));
   };
 
-  const handleSubmit = (type: string) => (e: any) => {
+  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSignupData((prev) => ({ ...prev, gender: e.target.value }));
+  };
+
+  const handleSubmit = (type: "in" | "up") => async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(
-      type === "in" ? "Sign In:" : "Sign Up:",
-      type === "in" ? loginData : signupData
-    );
-    // Replace with actual submission logic
+    if (type === "in") {
+      const st = await signin(loginData);
+      setStatus(st);
+    } else {
+      const st = await signup(signupData);
+      setStatus(st);
+    }
+    if (status === 200 || 201) {
+      toggleModal("");
+      toast.success("Welcome!");
+    }
   };
 
   return (
@@ -64,21 +75,80 @@ export default function SignInModal() {
         <a onClick={() => toggleModal("in")}>{userIcon}</a>
       </Tooltip>
 
-      {/* Sign In Modal */}
-      <Modal show={openModalIn} size="md" onClose={() => toggleModal("")} popup>
+      {/* Modal Component */}
+      <Modal show={!!openModal} size="md" onClose={() => toggleModal("")} popup>
         <Modal.Header />
         <Modal.Body>
-          <form onSubmit={handleSubmit("in")} className="space-y-6">
+          <form onSubmit={handleSubmit(openModal)} className="space-y-6">
             <h3 className="text-xl font-medium text-center text-gray-900 dark:text-white">
-              Tizimga kirish
+              {openModal === "in" ? "Tizimga kirish" : "Ro'yxatdan o'tish"}
             </h3>
+            {openModal === "up" && (
+              <>
+                <div>
+                  <Label
+                    htmlFor="firstName"
+                    value="Familiya"
+                    className="mb-2 block"
+                  />
+                  <TextInput
+                    id="firstName"
+                    placeholder="Familiya"
+                    value={signupData.firstName}
+                    onChange={(e) => handleInputChange(e, setSignupData)}
+                    required
+                  />
+                </div>
+                <div>
+                  <Label
+                    htmlFor="lastName"
+                    value="Ism"
+                    className="mb-1 block"
+                  />
+                  <TextInput
+                    id="lastName"
+                    placeholder="Ism"
+                    value={signupData.lastName}
+                    onChange={(e) => handleInputChange(e, setSignupData)}
+                    required
+                  />
+                </div>
+                <fieldset className="flex max-w-md gap-4">
+                  <div className="flex items-center gap-2">
+                    <Radio
+                      id="male"
+                      name="gender"
+                      value="male"
+                      checked={signupData.gender === "male"}
+                      onChange={handleRadioChange}
+                    />
+                    <Label htmlFor="male">Erkak</Label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Radio
+                      id="female"
+                      name="gender"
+                      value="female"
+                      checked={signupData.gender === "female"}
+                      onChange={handleRadioChange}
+                    />
+                    <Label htmlFor="female">Ayol</Label>
+                  </div>
+                </fieldset>
+              </>
+            )}
             <div>
               <Label htmlFor="email" value="Email" className="mb-2 block" />
               <TextInput
                 id="email"
                 placeholder="name@company.com"
-                value={loginData.email}
-                onChange={(e) => handleInputChange(e, setLoginData)}
+                value={openModal === "in" ? loginData.email : signupData.email}
+                onChange={(e) =>
+                  handleInputChange(
+                    e,
+                    openModal === "in" ? setLoginData : setSignupData
+                  )
+                }
                 required
               />
             </div>
@@ -87,116 +157,56 @@ export default function SignInModal() {
               <TextInput
                 id="password"
                 type="password"
-                value={loginData.password}
-                onChange={(e) => handleInputChange(e, setLoginData)}
+                value={
+                  openModal === "in" ? loginData.password : signupData.password
+                }
+                onChange={(e) =>
+                  handleInputChange(
+                    e,
+                    openModal === "in" ? setLoginData : setSignupData
+                  )
+                }
                 required
               />
             </div>
-            <div className="flex justify-between">
-              <div className="flex items-center gap-2">
-                <Checkbox id="remember" />
-                <Label htmlFor="remember">Remember me</Label>
+            {openModal === "in" && (
+              <div className="flex justify-between">
+                <div className="flex items-center gap-2">
+                  <Checkbox id="remember" />
+                  <Label htmlFor="remember">Remember me</Label>
+                </div>
+                <a
+                  href="#"
+                  className="text-sm text-cyan-700 hover:underline dark:text-cyan-500"
+                >
+                  Parolni unutdingizmi?
+                </a>
               </div>
-              <a
-                href="#"
-                className="text-sm text-cyan-700 hover:underline dark:text-cyan-500"
-              >
-                Parolni unutdingizmi?
-              </a>
-            </div>
-            <Button type="submit" className="w-full">
-              Kirish
+            )}
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading
+                ? "Loading..."
+                : openModal === "in"
+                ? "Kirish"
+                : "Yuborish"}
             </Button>
             <div className="flex justify-between text-sm font-medium text-gray-500 dark:text-gray-300">
-              Ro'yxatdan o'tmaganmisz?&nbsp;
+              {openModal === "in"
+                ? "Ro'yxatdan o'tmaganmisz?"
+                : "Ro'yxatdan o'tganmisz?"}
+              &nbsp;
               <a
-                onClick={() => toggleModal("up")}
+                onClick={() => toggleModal(openModal === "in" ? "up" : "in")}
                 className="text-cyan-700 hover:underline dark:text-cyan-500 cursor-pointer"
               >
-                Ro'yxatdan o'tish
+                {openModal === "in" ? "Ro'yxatdan o'tish" : "Tizimga Kirish"}
               </a>
-            </div>
-          </form>
-        </Modal.Body>
-      </Modal>
-
-      {/* Sign Up Modal */}
-      <Modal show={openModalUp} size="md" onClose={() => toggleModal("")} popup>
-        <Modal.Header />
-        <Modal.Body>
-          <form onSubmit={handleSubmit("up")} className="space-y-6">
-            <h3 className="text-xl font-medium text-center text-gray-900 dark:text-white">
-              Ro'yxatdan o'tish
-            </h3>
-            <div>
-              <Label
-                htmlFor="firstName"
-                value="Familiya"
-                className="mb-2 block"
-              />
-              <TextInput
-                id="firstName"
-                placeholder="Familiya"
-                value={signupData.firstName}
-                onChange={(e) => handleInputChange(e, setSignupData)}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="lastName" value="Ism" className="mb-1 block" />
-              <TextInput
-                id="lastName"
-                placeholder="Ism"
-                value={signupData.lastName}
-                onChange={(e) => handleInputChange(e, setSignupData)}
-                required
-              />
-            </div>
-            <fieldset className="flex max-w-md gap-4">
-              <div className="flex items-center gap-2">
-                <Radio id="united-state" name="countries" value="USA" />
-                <Label htmlFor="united-state">Erkak</Label>
-              </div>
-              <div className="flex items-center gap-2">
-                <Radio id="ayol" name="countries" value="Ayol" />
-                <Label htmlFor="ayol">Ayol</Label>
-              </div>
-            </fieldset>
-            <div>
-              <Label htmlFor="email" value="Email" className="mb-2 block" />
-              <TextInput
-                id="email"
-                placeholder="name@company.com"
-                value={signupData.email}
-                onChange={(e) => handleInputChange(e, setSignupData)}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="password" value="Parol" className="mb-2 block" />
-              <TextInput
-                id="password"
-                type="password"
-                value={signupData.password}
-                onChange={(e) => handleInputChange(e, setSignupData)}
-                required
-              />
-            </div>
-            <Button type="submit" className="w-full">
-              Yuborish
-            </Button>
-            <div className="flex justify-between text-sm font-medium text-gray-500 dark:text-gray-300">
-              Ro'yxatdan o'tganmisz?&nbsp;
-              <p
-                onClick={() => toggleModal("in")}
-                className="text-cyan-700 hover:underline dark:text-cyan-500 cursor-pointer"
-              >
-                Tizimga Kirish
-              </p>
             </div>
           </form>
         </Modal.Body>
       </Modal>
     </div>
   );
-}
+};
+
+export default SignInModal;

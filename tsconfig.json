@@ -7,7 +7,7 @@
     "skipLibCheck": true,
     "paths": {
       "@/*": ["./*"],
-      "@interfaces": ["./src/interfaces"],
+      "@register-interfaces": ["./src/interfaces/register.ts"],
       "@products-interface": ["./src/interfaces/products.ts"],
       "@components": ["./src/components"],
       "@ui": ["./src/components/ui"],

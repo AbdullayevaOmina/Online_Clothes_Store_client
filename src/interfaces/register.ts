@@ -3,13 +3,14 @@
 import { ReactNode } from "react";
 
 export interface Signin {
-  username: string;
-  password: string | number;
+  email: string;
+  password: string;
 }
 
 export interface Signup extends Signin {
-  name: string;
-  phone: string;
+  first_name: string;
+  gender: string;
+  last_name: string;
 }
 
 export interface ResetPassword {
@@ -17,14 +18,19 @@ export interface ResetPassword {
   phone?: string | number;
 }
 
+export interface RegisterStore {
+  data: any[];
+  signin: Signin;
+  signup: Signup;
+  isLoading: boolean;
+}
+
 export interface Request {
   signin: (data: Signin) => unknown;
   signup: (data: Signup) => unknown;
-  signout: () => void;
-  reset: (data: ResetPassword) => void;
 }
-// ------------- React Tsx , JSX Elmenets -------------
 
+// ------------- React Tsx , JSX Elmenets -------------
 export interface propType {
   children: ReactNode;
 }

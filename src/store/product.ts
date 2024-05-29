@@ -1,40 +1,38 @@
 import { create } from "zustand";
-import { ProductsStore } from "@products-interface";
+import { ProductsStore, GetProducts, ProductData } from "@products-interface";
 import { products } from "@service";
+
 const useProductStore = create<ProductsStore>((set) => ({
   dataAll: [],
-  productData: [],
+  productData: {} as ProductData,
   isLoading: false,
   totalCount: 1,
-  getAll: async (params) => {
+
+  getAll: async (params: GetProducts) => {
     try {
       set({ isLoading: true });
       const response = await products.get_all(params);
       if (response.status === 200) {
         set({
           totalCount: Math.ceil(response.data.total_count / params.limit),
-          dataAll: response?.data?.products,
+          dataAll: response.data.products,
         });
       }
     } catch (error) {
-      console.log(error);
-      set({
-        totalCount: 0,
-      });
+      console.error("Error fetching all products:", error);
+      set({ totalCount: 0 });
     } finally {
       set({ isLoading: false });
     }
   },
 
-  get: async (id) => {
+  get: async (id: string | undefined) => {
     try {
       set({ isLoading: true });
       const response = await products.get(id);
       if (response.status === 200) {
-        set({
-          productData: response?.data,
-        });
-        return response?.data;
+        set({ productData: response.data });
+        return response.data;
       }
     } catch (error) {
       console.error("Error fetching product data:", error);
