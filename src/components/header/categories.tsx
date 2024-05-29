@@ -1,15 +1,19 @@
-import { List, ListItem } from "flowbite-react";
+import { Dropdown } from "flowbite-react";
 
 function UiCategory() {
   return (
-    <List horizontal className="text-gray-900 dark:text-whit my-2 gap-8">
-      <ListItem>Erkaklar</ListItem>
-      <ListItem>Ayollar</ListItem>
-      <ListItem>Bolalar</ListItem>
-      <ListItem>Fudbolkalar</ListItem>
-      <ListItem>Poyabzallar</ListItem>
-      <ListItem>Aksesuarlar</ListItem>
-    </List>
+    <div className=" flex gap-5">
+      <Dropdown label="Ayollar" inline dismissOnClick={false}>
+        <Dropdown.Item>Catwgory 1</Dropdown.Item>
+        <Dropdown.Item>Catwgory 2</Dropdown.Item>
+        <Dropdown.Item>Catwgory 3</Dropdown.Item>
+      </Dropdown>
+      <Dropdown label="Erkaklar" inline dismissOnClick={false}>
+        <Dropdown.Item>Catwgory 1</Dropdown.Item>
+        <Dropdown.Item>Catwgory 2</Dropdown.Item>
+        <Dropdown.Item>Catwgory 3</Dropdown.Item>
+      </Dropdown>
+    </div>
   );
 }
 export default UiCategory;

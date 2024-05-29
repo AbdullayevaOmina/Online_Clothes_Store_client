@@ -5,21 +5,20 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import App from "../App";
-import { Cart, LikesProduct, NotFound, SignIn, SignUp } from "@pages";
+import { Cart, LikesProduct, NotFound } from "@pages";
 import SingleProduct from "../pages/products/singleProduct";
-import { getDataFromCookie } from "@token-service";
+// import { MainLayout } from "../layout";
 
 const Index = () => {
-  const id = getDataFromCookie("id");
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<App />}>
-        <Route path="signin" element={<SignIn />} />
-        <Route path="signup" element={<SignUp />} />
+        {/* <Route path="user/*" element={<MainLayout />}> */}
         <Route path="cart" element={<Cart />} />
         <Route path="likes" element={<LikesProduct />} />
-        <Route path={`product/${id}`} element={<SingleProduct />} />
-        <Route path="/*" element={<NotFound />} />
+        <Route path="product/:id" element={<SingleProduct />} />
+        {/* </Route> */}
+        <Route path="*" element={<NotFound />} />
       </Route>
     )
   );

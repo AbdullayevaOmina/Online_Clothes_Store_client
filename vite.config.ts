@@ -23,6 +23,7 @@ export default defineConfig({
       { find: "@routes", replacement: "/src/router/routes.tsx" },
       { find: "@token-service", replacement: "/src/utils/token-service.ts" },
       { find: "@service", replacement: "/src/service" },
+      { find: "@modals", replacement: "/src/components/modals/index.tsx" },
     ],
   },
 });

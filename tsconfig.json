@@ -18,7 +18,8 @@
       "@routes": ["./src/router/routes.tsx"],
       "@service": ["./src/service"],
       "@store": ["./src/store/index"],
-      "@token-service": ["./src/utils/token-service.ts"]
+      "@token-service": ["./src/utils/token-service.ts"],
+      "@modals": ["./src/components/modals/index.tsx"]
     },
     /* Bundler mode */
     "moduleResolution": "bundler",

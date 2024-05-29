@@ -1,17 +1,15 @@
 import { Outlet } from "react-router-dom";
-import { Navbar, UiCategory } from "@components";
-import { MyCarousel, ProductCard } from "@ui";
+import { MyCarousel } from "@ui";
+import { Products } from "@pages";
 
-const index = () => {
+const MainLayout = () => {
   return (
     <>
       <Outlet />
-      <Navbar />
-      <UiCategory />
       <MyCarousel />
-      <ProductCard/>
+      <Products />
     </>
   );
 };
 
-export default index;
+export default MainLayout;
