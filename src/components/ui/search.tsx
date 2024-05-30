@@ -2,7 +2,7 @@
 
 const Search = () => {
   return (
-    <form className="max-w-[550px] min-w-[550px] mx-auto">
+    <form className="lg:max-w-[550px] lg:min-w-[550px] mx-auto hidden md:block md:min-w-[300px] md:max-w-[350px] ">
       <label
         htmlFor="default-search"
         className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -13,6 +13,7 @@ const Search = () => {
         {/* <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           {searchIcon}
         </div> */}
+
         <input
           type="search"
           id="default-search"

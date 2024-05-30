@@ -171,13 +171,14 @@ const SignInModal = () => {
             </div>
             {openModal === "in" && (
               <div className="flex justify-between">
-                <div className="flex items-center gap-2">
-                  <Checkbox id="remember" />
+                <div className="flex items-center gap-2 cursor-pointer">
+                  <Checkbox id="remember" className="cursor-pointer" />
                   <Label htmlFor="remember">Remember me</Label>
                 </div>
                 <a
                   href="#"
                   className="text-sm text-cyan-700 hover:underline dark:text-cyan-500"
+                  onClick={() => alert("Forgot passworddi qilishshi unuttin")}
                 >
                   Parolni unutdingizmi?
                 </a>

@@ -5,6 +5,7 @@ import {
   minusIcon,
   plusIcon,
   xIcon,
+  rightIcon,
 } from "@icons";
 import { useEffect, useState } from "react";
 import { useCartStore } from "@store";
@@ -21,7 +22,7 @@ const Cart = () => {
     removeFromLiked,
   } = useCartStore();
   const [isLiked, setIsLiked] = useState(false);
-
+  const [total, setTotal] = useState(0);
   useEffect(() => {
     getCartData();
     getLikedData();
@@ -35,10 +36,10 @@ const Cart = () => {
 
   return (
     <>
-      <section className="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
+      <section className="bg-white py-8 mt-7 antialiased dark:bg-gray-900 md:py-16">
         <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
-            Shopping Cart
+            Savatingiz
           </h2>
 
           <div className="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
@@ -127,13 +128,8 @@ const Cart = () => {
                   <div className="space-y-6 overflow-hidden rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
                     <a href="#" className="overflow-hidden rounded">
                       <img
-                        className="mx-auto h-44 w-44 dark:hidden"
-                        src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/apple-watch-light.svg"
-                        alt="imac image"
-                      />
-                      <img
-                        className="mx-auto hidden h-44 w-44 dark:block"
-                        src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/apple-watch-dark.svg"
+                        className="mx-auto h-44 w-44 "
+                        src="https://images.uzum.uz/co56p9epom4ma10rtad0/original.jpg"
                         alt="imac image"
                       />
                     </a>
@@ -188,7 +184,7 @@ const Cart = () => {
             <div className="mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full">
               <div className="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6">
                 <p className="text-xl font-semibold text-gray-900 dark:text-white">
-                  Order summary
+                  Buyutmangiz
                 </p>
 
                 <div className="space-y-4">
@@ -198,7 +194,7 @@ const Cart = () => {
                         Original price
                       </dt>
                       <dd className="text-base font-medium text-gray-900 dark:text-white">
-                        $7,592.00
+                        $0
                       </dd>
                     </dl>
 
@@ -207,7 +203,7 @@ const Cart = () => {
                         Savings
                       </dt>
                       <dd className="text-base font-medium text-green-600">
-                        -$299.00
+                        -$0
                       </dd>
                     </dl>
 
@@ -216,7 +212,7 @@ const Cart = () => {
                         Store Pickup
                       </dt>
                       <dd className="text-base font-medium text-gray-900 dark:text-white">
-                        $99
+                        $0
                       </dd>
                     </dl>
 
@@ -225,7 +221,7 @@ const Cart = () => {
                         Tax
                       </dt>
                       <dd className="text-base font-medium text-gray-900 dark:text-white">
-                        $799
+                        $0
                       </dd>
                     </dl>
                   </div>
@@ -235,48 +231,31 @@ const Cart = () => {
                       Total
                     </dt>
                     <dd className="text-base font-bold text-gray-900 dark:text-white">
-                      $8,191.00
+                      ${total}
                     </dd>
                   </dl>
                 </div>
 
                 <a
                   href="#"
-                  className="flex w-full items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                  className="flex w-full items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-cyan-600 dark:bg-primary-600 bg-cyan-700 dark:focus:ring-primary-800"
                 >
                   Proceed to Checkout
                 </a>
 
                 <div className="flex items-center justify-center gap-2">
                   <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                    {" "}
                     or{" "}
                   </span>
                   <a
-                    href="#"
-                    title=""
+                    href="/"
                     className="inline-flex items-center gap-2 text-sm font-medium text-primary-700 underline hover:no-underline dark:text-primary-500"
                   >
-                    Continue Shopping
-                    <svg
-                      className="h-5 w-5"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M19 12H5m14 0-4 4m4-4-4-4"
-                      />
-                    </svg>
+                    Continue Shopping {rightIcon}
                   </a>
                 </div>
               </div>
-
+              {/* promo code */}
               <div className="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6">
                 <form className="space-y-4">
                   <div>

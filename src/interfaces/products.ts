@@ -21,6 +21,15 @@ export interface ProductData {
   size: number;
 }
 
+export interface ProductCardProps {
+  product_id: string;
+  product_name: string;
+  cost: number;
+  image_url: string[];
+  description: string;
+  discount: number;
+}
+
 export interface ProductsStore {
   dataAll: any[];
   productData: ProductData;

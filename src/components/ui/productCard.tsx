@@ -4,19 +4,15 @@ import { addToCartIcon, likeIcon, likeIconSolid, starIcon } from "@icons";
 import { setDataToCookie } from "@token-service";
 import { useNavigate } from "react-router-dom";
 import { useCartStore } from "@store"; // Ensure the path is correct
-
-interface ProductCardProps {
-  product_id: string;
-  product_name: string;
-  cost: number;
-  image_url: string[];
-}
+import { ProductCardProps } from "@products-interface";
 
 const ProductCard: React.FC<ProductCardProps> = ({
   product_id,
   product_name,
   cost,
   image_url,
+  description,
+  discount,
 }) => {
   const navigate = useNavigate();
   const {
@@ -31,7 +27,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
   } = useCartStore();
   const [isLiked, setIsLiked] = useState(false);
   const [isInCart, setIsInCart] = useState(false);
-
+  const price = (cost / 100) * (100 - discount);
+  
   useEffect(() => {
     getCartData();
     getLikedData();
@@ -67,27 +64,33 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <Card className="max-w-sm" imgAlt={product_name} imgSrc={image_url[0]}>
-      <div onClick={handlePage} className="cursor-pointer">
-        <h5 className="text-xl hover:text-sky-600 font-semibold tracking-tight text-gray-900 dark:text-white">
+    <Card
+      className="max-w-sm relative  hover:scale-105 hover:shadow-lg transition-transform"
+      imgAlt={product_name}
+      imgSrc={image_url[0]}
+    >
+      <div>
+        <span
+          onClick={handlePage}
+          className="text-lg font-semibold leading-tight text-gray-900 cursor-pointer hover:underline dark:text-white"
+        >
           {product_name}
-        </h5>
-        <div className="mb-5 mt-2.5 flex items-center">
-          {Array(5)
-            .fill(0)
-            .map((_, i) => (
-              <span key={i}>{starIcon}</span>
-            ))}
-          <span className="ml-3 mr-2 rounded bg-cyan-100 px-2.5 py-0.5 text-xs font-semibold text-cyan-800 dark:bg-cyan-200 dark:text-cyan-800">
-            5.0
-          </span>
-        </div>
-        <div className="text-lg font-semibold text-gray-900 dark:text-white">
-          💲{cost}
-        </div>
+        </span>
+        <p className="mt-2 text-base font-normal text-gray-500 dark:text-gray-400">
+          {description.slice(0, 100)}...
+        </p>
       </div>
 
-      <div className="flex items-center justify-end gap-5 mt-4">
+      <div>
+        <p className="text-lg font-bold text-gray-900 dark:text-white">
+          <span className="line-through"> ${cost} </span>
+        </p>
+        <p className="text-lg font-bold leading-tight text-green-600 dark:text-green-500">
+          ${price}
+        </p>
+      </div>
+
+      <div className="flex items-center justify-end gap-5 mt-4 absolute bottom-6 right-8">
         <button onClick={handleLike}>
           {isLiked ? likeIconSolid : likeIcon}
         </button>

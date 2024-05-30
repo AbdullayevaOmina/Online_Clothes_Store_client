@@ -1,4 +1,3 @@
-import Home from "./home";
 import About from "./about";
 import Contact from "./contact";
 import Posts from "./posts";
@@ -13,7 +12,6 @@ import ProductReview from "./products/ProductReview.tsx";
 import LikesProduct from "./likesProduct/LikesProduct.tsx";
 
 export {
-  Home,
   About,
   Contact,
   Posts,

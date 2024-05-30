@@ -5,7 +5,6 @@ import { SignInModal } from "@modals";
 import { cartIcon, likeIcon } from "@icons";
 import { Tooltip } from "flowbite-react";
 import logo from "../../assets/Logo.png";
-import { UiCategory } from "@components";
 
 const MyNavbar: React.FC = () => {
   const [darkMode, setDarkMode] = useState<boolean>(() => {
@@ -22,27 +21,27 @@ const MyNavbar: React.FC = () => {
   };
 
   useEffect(() => {
-    if (darkMode) {
+    if (!darkMode) {
       document.documentElement.classList.add("dark");
       document.body.classList.add("bg-gray-900", "text-white");
     } else {
       document.documentElement.classList.remove("dark");
       document.body.classList.remove("bg-gray-900", "text-white");
+      document.body.classList.add("bg-cyan-50");
     }
   }, [darkMode]);
 
   return (
     <div>
-      <Navbar className="fixed top-0 left-0 right-0 z-50">
+      <Navbar className="fixed top-0 bg-cyan-100  left-0 right-0 z-50 shadow-cyan-300 shadow-sm dark:shadow-none">
         <Navbar.Brand href="/">
           <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
             <img className="w-44" src={logo} alt="Online Kiyim Do'koni" />
           </span>
         </Navbar.Brand>
+        <Search />
         <Navbar.Toggle />
         <Navbar.Collapse>
-          <Search />
-          <UiCategory />
           <div className="flex gap-6 items-center">
             <button onClick={toggleDarkMode}>
               <DarkThemeToggle />

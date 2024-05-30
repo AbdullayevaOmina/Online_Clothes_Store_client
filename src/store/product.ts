@@ -32,6 +32,7 @@ const useProductStore = create<ProductsStore>((set) => ({
       const response = await products.get(id);
       if (response.status === 200) {
         set({ productData: response.data });
+        set({ isLoading: false });
         return response.data;
       }
     } catch (error) {
