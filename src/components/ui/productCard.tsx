@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Card } from "flowbite-react";
-import { addToCartIcon, likeIcon, likeIconSolid, starIcon } from "@icons";
+import { addToCartIcon } from "@icons";
 import { setDataToCookie } from "@token-service";
 import { useNavigate } from "react-router-dom";
-import { useCartStore } from "@store"; // Ensure the path is correct
+import { useCartStore } from "@store";
 import { ProductCardProps } from "@products-interface";
+import { LikeButton } from "@ui";
 
 const ProductCard: React.FC<ProductCardProps> = ({
   product_id,
@@ -15,6 +16,15 @@ const ProductCard: React.FC<ProductCardProps> = ({
   discount,
 }) => {
   const navigate = useNavigate();
+  const price = (cost / 100) * (100 - discount);
+
+  const handlePage = () => {
+    setDataToCookie("id", product_id);
+    navigate(`/product/${product_id}`);
+    window.location.reload();
+  };
+
+  // --------------------------------------------------
   const {
     cart,
     liked,
@@ -25,34 +35,27 @@ const ProductCard: React.FC<ProductCardProps> = ({
     addToLiked,
     removeFromLiked,
   } = useCartStore();
-  const [isLiked, setIsLiked] = useState(false);
+  // const [isLiked, setIsLiked] = useState(false);
   const [isInCart, setIsInCart] = useState(false);
-  const price = (cost / 100) * (100 - discount);
-  
+
   useEffect(() => {
     getCartData();
     getLikedData();
   }, [getCartData, getLikedData]);
 
   useEffect(() => {
-    setIsLiked(liked.includes(product_id));
+    // setIsLiked(liked.includes(product_id));
     setIsInCart(cart.includes(product_id));
   }, [liked, cart, product_id]);
 
-  const handlePage = () => {
-    setDataToCookie("id", product_id);
-    navigate(`/product/${product_id}`);
-    window.location.reload();
-  };
-
-  const handleLike = () => {
-    if (isLiked) {
-      removeFromLiked(product_id);
-    } else {
-      addToLiked(product_id);
-    }
-    setIsLiked(!isLiked);
-  };
+  // const handleLike = () => {
+  //   if (isLiked) {
+  //     removeFromLiked(product_id);
+  //   } else {
+  //     addToLiked(product_id);
+  //   }
+  //   setIsLiked(!isLiked);
+  // };
 
   const handleAddToCart = () => {
     if (isInCart) {
@@ -62,10 +65,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
     }
     setIsInCart(!isInCart);
   };
+  // --------------------------------------------------
 
   return (
     <Card
-      className="max-w-sm relative  hover:scale-105 hover:shadow-lg transition-transform"
+      className="max-w-sm relative  hover:scale-105 hover:shadow-sky-600  hover:shadow-lg transition-transform"
       imgAlt={product_name}
       imgSrc={image_url[0]}
     >
@@ -91,9 +95,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
       </div>
 
       <div className="flex items-center justify-end gap-5 mt-4 absolute bottom-6 right-8">
-        <button onClick={handleLike}>
+        {/* <button onClick={handleLike}>
           {isLiked ? likeIconSolid : likeIcon}
-        </button>
+        </button> */}
+        <LikeButton />
         <button
           onClick={handleAddToCart}
           className={isInCart ? "text-green-500" : ""}

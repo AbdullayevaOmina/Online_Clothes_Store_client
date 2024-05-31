@@ -13,7 +13,6 @@ const SingleProduct = () => {
   }, [id, get]);
 
   const { image_url, product_name, cost, description, discount } = productData;
-  console.log(image_url);
 
   return (
     <>

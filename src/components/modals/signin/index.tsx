@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { userIcon } from "@icons";
 import {
   Button,
@@ -14,9 +14,8 @@ import { useRegisterStore } from "@store";
 import { toast } from "react-toastify";
 
 const SignInModal = () => {
-  const { signin, signup, isLoading } = useRegisterStore();
+  const { signin, signup, isLoading, verify } = useRegisterStore();
   const [openModal, setOpenModal] = useState<"in" | "up" | "">("");
-  const [status, setStatus] = useState<number | undefined | null>();
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [signupData, setSignupData] = useState({
     email: "",
@@ -25,6 +24,41 @@ const SignInModal = () => {
     lastName: "",
     gender: "",
   });
+  const [verifyData, setVerifyData] = useState({
+    email: signupData.email,
+    otp: "",
+  });
+  const [verifyModal, setVerifyModal] = useState<boolean>(false);
+  const emailInputRef = useRef<HTMLInputElement>(null);
+
+  // --------------------------> Timer <----------------------------
+  const [timeLeft, setTimeLeft] = useState(180); // 3 minutes = 180 seconds
+  useEffect(() => {
+    if (!verifyModal) {
+      setTimeLeft(180);
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+
+    if (timeLeft === 0) {
+      setVerifyModal(false);
+    }
+
+    return () => clearInterval(timer);
+  }, [verifyModal, timeLeft]);
+
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${String(minutes).padStart(2, "0")} : ${String(secs).padStart(
+      2,
+      "0"
+    )}`;
+  };
+  // --------------------------> Timer <----------------------------
 
   const toggleModal = (type: "in" | "up" | "") => {
     setOpenModal(type);
@@ -43,7 +77,7 @@ const SignInModal = () => {
     setData: React.Dispatch<React.SetStateAction<any>>
   ) => {
     const { id, value } = e.target;
-    setData((prev: any) => ({ ...prev, [id]: value }));
+    setData((prev) => ({ ...prev, [id]: value }));
   };
 
   const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,18 +86,51 @@ const SignInModal = () => {
 
   const handleSubmit = (type: "in" | "up") => async (e: React.FormEvent) => {
     e.preventDefault();
-    if (type === "in") {
-      const st = await signin(loginData);
-      setStatus(st);
-    } else {
-      const st = await signup(signupData);
-      setStatus(st);
-    }
-    if (status === 200 || 201) {
-      toggleModal("");
-      toast.success("Welcome!");
+    try {
+      if (type === "in") {
+        const st = await signin(loginData);
+        if (st === 200) {
+          setOpenModal("");
+        }
+      } else {
+        const st = await signup(signupData);
+        if (st === 200) {
+          setVerifyData({ email: signupData.email, otp: "" });
+          setVerifyModal(true);
+        }
+      }
+    } catch (error) {
+      toast.error("An error occurred. Please try again.");
     }
   };
+
+  // ----------------------------------------------VERIFY CODE
+  const handleVerifyInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setVerifyData((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const verifySubmit = async () => {
+    try {
+      const responseStatus = await verify(verifyData);
+      console.log(verifyData);
+      if (responseStatus === 200) {
+        toast.success("Verification successful!");
+        const st = await signin({
+          email: signupData.email,
+          password: signupData.password,
+        });
+        if (st === 200) setOpenModal("");
+        setVerifyModal(false);
+        toggleModal("");
+      } else {
+        toast.error("Verification failed. Please try again.");
+      }
+    } catch (error) {
+      toast.error("An error occurred. Please try again.");
+    }
+  };
+  // ----------------------------------------------VERIFY CODE
 
   return (
     <div>
@@ -75,7 +142,6 @@ const SignInModal = () => {
         <a onClick={() => toggleModal("in")}>{userIcon}</a>
       </Tooltip>
 
-      {/* Modal Component */}
       <Modal show={!!openModal} size="md" onClose={() => toggleModal("")} popup>
         <Modal.Header />
         <Modal.Body>
@@ -88,12 +154,12 @@ const SignInModal = () => {
                 <div>
                   <Label
                     htmlFor="firstName"
-                    value="Familiya"
+                    value="Ism"
                     className="mb-2 block"
                   />
                   <TextInput
                     id="firstName"
-                    placeholder="Familiya"
+                    placeholder="Ism"
                     value={signupData.firstName}
                     onChange={(e) => handleInputChange(e, setSignupData)}
                     required
@@ -102,12 +168,12 @@ const SignInModal = () => {
                 <div>
                   <Label
                     htmlFor="lastName"
-                    value="Ism"
+                    value="Familiya"
                     className="mb-1 block"
                   />
                   <TextInput
                     id="lastName"
-                    placeholder="Ism"
+                    placeholder="Familiya"
                     value={signupData.lastName}
                     onChange={(e) => handleInputChange(e, setSignupData)}
                     required
@@ -206,6 +272,65 @@ const SignInModal = () => {
           </form>
         </Modal.Body>
       </Modal>
+
+      {/* ============================================ VERIFY MODAL */}
+      {verifyModal && (
+        <Modal
+          show={verifyModal}
+          size="md"
+          popup
+          onClose={() => {
+            setVerifyModal(false);
+            setTimeLeft(180);
+          }}
+          initialFocus={emailInputRef}
+        >
+          <Modal.Header />
+          <Modal.Body>
+            <div className="space-y-6">
+              <h3 className="text-xl font-medium text-gray-900 dark:text-white">
+                Emailingizga yuborilgan kodni kiriting
+              </h3>
+              <h2 className="w-full text-center text-xl">
+                {formatTime(timeLeft)}
+              </h2>
+              <div>
+                <Label
+                  htmlFor="email"
+                  value="Your email"
+                  className="mb-2 block"
+                />
+                <TextInput
+                  id="email"
+                  ref={emailInputRef}
+                  placeholder="name@company.com"
+                  value={verifyData.email}
+                  onChange={handleVerifyInputChange}
+                  required
+                />
+              </div>
+              <div>
+                <Label
+                  htmlFor="otp"
+                  value="Tastiqlash kodi"
+                  className="mb-2 block"
+                />
+                <TextInput
+                  id="otp"
+                  type="password"
+                  placeholder="Tastiqlash kodini kiriting"
+                  value={verifyData.otp}
+                  onChange={handleVerifyInputChange}
+                  required
+                />
+              </div>
+              <Button className="w-full" onClick={verifySubmit}>
+                Yuborish
+              </Button>
+            </div>
+          </Modal.Body>
+        </Modal>
+      )}
     </div>
   );
 };

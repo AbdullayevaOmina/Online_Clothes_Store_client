@@ -9,6 +9,7 @@
       "@/*": ["./*"],
       "@register-interfaces": ["./src/interfaces/register.ts"],
       "@products-interface": ["./src/interfaces/products.ts"],
+      "@like-interfaces": ["./src/interfaces/like.ts"],
       "@components": ["./src/components"],
       "@ui": ["./src/components/ui"],
       "@icons": ["./src/assets/icons.tsx"],

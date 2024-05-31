@@ -12,8 +12,11 @@ const useProductStore = create<ProductsStore>((set) => ({
     try {
       set({ isLoading: true });
       const response = await products.get_all(params);
+      console.log(response);
+      
       if (response.status === 200) {
         set({
+          // totalCount: response.data.total_count,
           totalCount: Math.ceil(response.data.total_count / params.limit),
           dataAll: response.data.products,
         });

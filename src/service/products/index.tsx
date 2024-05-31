@@ -2,8 +2,8 @@ import request from "../config";
 import { Request } from "@products-interface";
 
 export const auth: Request = {
-  get_all: (params) => request.get("/v1/products", { params }),
-  get: (id) => request.get(`/v1/product/${id}`),
+  get_all: (params) => request.get("/products", { params }),
+  get: (id) => request.get(`/product/${id}`),
 };
 
 export default auth;
